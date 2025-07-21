@@ -1,0 +1,107 @@
+/* Import your chosen Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Define a consistent color palette */
+    --primary-color: #4CAF50;
+    /* Green - for primary actions */
+    --accent-color: #2196F3;
+    /* Blue - for secondary actions/info */
+    --neutral-light: #F8F9FA;
+    /* Light gray - backgrounds */
+    --neutral-medium: #E9ECEF;
+    /* Medium gray - borders, subtle backgrounds */
+    --text-dark: #343A40;
+    /* Dark gray - main text */
+    --text-medium: #6C757D;
+    /* Medium gray - secondary text */
+    --error-color: #DC3545;
+    /* Red */
+    --success-color: #28A745;
+    /* Green */
+}
+
+/* Basic CSS Reset & Global Styles */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    /* Include padding and border in element's total width and height */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    /* Use your imported font */
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--neutral-light);
+    /* Soft background */
+    -webkit-font-smoothing: antialiased;
+    /* Smoother font rendering */
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-dark);
+    margin-bottom: 0.8em;
+    font-weight: 600;
+    /* Slightly bolder headings */
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+button {
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease-in-out;
+}
+
+input,
+select,
+textarea {
+    font-family: 'Inter', sans-serif;
+    padding: 10px;
+    border: 1px solid var(--neutral-medium);
+    border-radius: 4px;
+    font-size: 0.95em;
+    transition: all 0.2s ease-in-out;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+    /* Accent color glow */
+    outline: none;
+}
+
+/* Simple scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--neutral-light);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--neutral-medium);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}

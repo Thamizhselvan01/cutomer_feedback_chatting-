@@ -1,0 +1,127 @@
+TicketList.module.css
+
+.listContainer {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+}
+
+.ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.li {
+  border: 1px solid #eee;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  position: relative;
+  cursor: pointer;
+  /* ADD THESE FOR SMOOTHNESS */
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-out;
+}
+
+.li:hover {
+  background-color: #e0f0ff; /* Light blue on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); /* More prominent shadow */
+}
+
+.ticketHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.descriptionP {
+  margin-top: 8px;
+  margin-bottom: 5px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.date {
+  font-size: 0.8em;
+  color: #888;
+}
+
+/* Status Styles (dynamic classes) */
+.status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 15px;
+  text-transform: uppercase;
+}
+
+.statusOpen {
+  background-color: #d4edda;
+  color: #28a745;
+}
+
+.statusInProgress {
+  background-color: #fff3cd;
+  color: #ffc107;
+}
+
+.statusResolved, .statusClosed {
+  background-color: #cfe2ff;
+  color: #007bff;
+}
+
+/* Priority Styles (dynamic classes) */
+.priority {
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.priorityUrgent {
+    color: white;
+    background-color: #dc3545;
+}
+
+.priorityHigh {
+    color: white;
+    background-color: #ffc107;
+}
+
+.priorityMedium {
+    color: #333;
+    background-color: #17a2b8;
+}
+
+.priorityLow {
+    color: #333;
+    background-color: #6c757d;
+}
+
+.message {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.error {
+  text-align: center;
+  color: red;
+  font-weight: bold;
+}
+
+.success {
+  text-align: center;
+  color: green;
+  font-weight: bold;
+}

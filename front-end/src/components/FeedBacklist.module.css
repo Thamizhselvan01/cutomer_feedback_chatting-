@@ -1,0 +1,103 @@
+/* FeedbackList.module.css */
+
+.listContainer {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  border: 1px solid var(--neutral-medium);
+  border-radius: 12px; /* Consistent rounded corners */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Consistent shadow */
+  background-color: #fff;
+}
+
+.listTitle {
+  text-align: center;
+  color: var(--text-dark);
+  margin-bottom: 25px; /* Consistent spacing */
+  font-size: 1.8em;
+  font-weight: 700;
+}
+
+.ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.li {
+  border: 1px solid var(--neutral-medium); /* Consistent border */
+  padding: 18px 20px; /* More padding for better spacing */
+  margin-bottom: 12px; /* More space between items */
+  border-radius: 8px; /* Consistent rounded corners */
+  background-color: #fefefe; /* Slightly off-white background */
+  position: relative;
+  overflow: hidden; /* For any internal elements or pseudo-elements */
+  cursor: default; /* Not clickable like tickets, so default cursor */
+
+  /* Smooth UI effects */
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-out, box-shadow 0.3s ease;
+}
+
+.li:hover {
+  background-color: var(--neutral-light); /* Subtle background change on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12); /* More prominent shadow on hover */
+}
+
+.feedbackHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px; /* Space below header */
+}
+
+.subject {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.rating {
+  font-size: 0.9em;
+  font-weight: 700;
+  color: var(--accent-color); /* Use accent color for rating */
+  background-color: rgba(33, 150, 243, 0.1); /* Light background for rating */
+  padding: 5px 10px;
+  border-radius: 15px; /* Pill shape for rating */
+  display: inline-flex; /* To apply padding correctly */
+  align-items: center;
+  gap: 5px; /* Space for a star icon if added later */
+}
+
+.messageP {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  line-height: 1.6; /* Improved readability */
+  color: var(--text-medium);
+}
+
+.userDate {
+  font-size: 0.8em;
+  color: var(--text-medium);
+  margin-top: 10px;
+  display: block; /* Ensure it's on its own line */
+}
+
+.message {
+  text-align: center;
+  color: var(--text-medium);
+  font-style: italic;
+  padding: 20px;
+  background-color: var(--neutral-light);
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.error {
+  text-align: center;
+  color: var(--error-color);
+  font-weight: bold;
+  padding: 15px;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 8px;
+  border: 1px solid var(--error-color);
+}

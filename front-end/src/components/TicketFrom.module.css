@@ -1,0 +1,103 @@
+/* TicketForm.module.css */
+
+.formContainer {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  border: 1px solid var(--neutral-medium);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Consistent spacing between form groups */
+}
+
+.formTitle {
+  text-align: center;
+  color: var(--text-dark);
+  margin-bottom: 25px; /* More space below title */
+  font-size: 1.8em;
+  font-weight: 700;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px; /* Space between label and input */
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 0.95em;
+}
+
+/* Inherits base styles from App.css for input, select, textarea */
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 12px; /* Slightly more padding for better touch targets */
+  border: 1px solid var(--neutral-medium);
+  border-radius: 8px; /* Slightly more rounded corners */
+  background-color: white;
+  font-size: 1em;
+  color: var(--text-dark);
+  /* Transitions are defined globally in App.css for focus/hover */
+}
+
+.textarea {
+  min-height: 100px; /* Good default height for description */
+  resize: vertical; /* Allow vertical resizing */
+}
+
+.submitButton {
+  background-color: var(--primary-color); /* Use primary color */
+  color: white;
+  padding: 14px 25px; /* Larger padding for a more prominent button */
+  border-radius: 25px; /* Pill shape */
+  font-size: 1.1em;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  margin-top: 10px; /* Space above button */
+  /* Transitions inherited from App.css for hover/active */
+}
+
+.submitButton:hover {
+  background-color: #43A047; /* Slightly darker green on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.message {
+  text-align: center;
+  color: var(--text-medium);
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.successMessage {
+  color: var(--success-color);
+  font-weight: bold;
+  background-color: rgba(40, 167, 69, 0.1); /* Light green background */
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid var(--success-color);
+}
+
+.errorMessage {
+  color: var(--error-color);
+  font-weight: bold;
+  background-color: rgba(220, 53, 69, 0.1); /* Light red background */
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid var(--error-color);
+}

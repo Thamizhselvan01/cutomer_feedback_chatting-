@@ -1,0 +1,423 @@
+/* src/components/TicketDetail.module.css - Complete & Refined */
+
+/* --- Main Container & Layout --- */
+.detailContainer {
+    max-width: 1000px;
+    /* Wider container for better layout */
+    margin: 40px auto;
+    padding: 30px;
+    border: 1px solid var(--neutral-medium);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    /* Deeper, softer shadow */
+    background-color: #fff;
+    display: flex;
+    /* Use flexbox for overall layout */
+    flex-direction: column;
+    gap: 30px;
+    /* Space between main sections */
+}
+
+.backButton {
+    background-color: var(--text-medium);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.backButton:hover {
+    background-color: var(--text-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.backButton:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Ticket Info Grid & Description --- */
+.infoGridAndDescription {
+    display: flex;
+    flex-direction: column;
+    /* Stack info grid and description */
+    gap: 25px;
+    /* Space between these two sections */
+}
+
+.ticketInfoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    /* Adaptive columns */
+    gap: 20px 30px;
+    /* Row and column gap */
+    padding: 25px;
+    background-color: var(--neutral-light);
+    border-radius: 10px;
+    border: 1px solid var(--neutral-medium);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+    /* Subtle card shadow */
+}
+
+.infoItem {
+    padding: 5px 0;
+    font-size: 0.95em;
+    color: var(--text-dark);
+    display: flex;
+    /* For label and value alignment */
+    flex-direction: column;
+    gap: 4px;
+    /* Space between label and value */
+}
+
+.infoItem strong {
+    color: var(--text-dark);
+    font-weight: 700;
+    font-size: 1.05em;
+    /* Slightly larger labels */
+}
+
+.descriptionP {
+    line-height: 1.8;
+    color: var(--text-medium);
+    background-color: #fefefe;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--neutral-medium);
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
+    /* Subtle inner shadow */
+}
+
+/* --- Section Titles --- */
+.sectionTitle {
+    border-bottom: 2px solid var(--accent-color);
+    /* More prominent accent-colored line */
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+    font-weight: 700;
+    font-size: 1.5em;
+    /* Larger title */
+    text-align: center;
+    /* Centered for visual hierarchy */
+}
+
+/* --- Priority & Status Styling --- */
+.priority,
+.statusBadge {
+    font-size: 0.9em;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 20px;
+    /* Pill shape */
+    display: inline-block;
+    /* Essential for padding */
+    margin-left: 8px;
+    /* Space from the label */
+}
+
+.priorityUrgent {
+    color: white;
+    background-color: var(--error-color);
+    /* Red */
+}
+
+.priorityHigh {
+    color: var(--text-dark);
+    background-color: #FFEB3B;
+    /* Yellow */
+}
+
+.priorityMedium {
+    color: white;
+    background-color: var(--accent-color);
+    /* Blue */
+}
+
+.priorityLow {
+    color: white;
+    background-color: var(--text-medium);
+    /* Gray */
+}
+
+.statusBadgeOpen {
+    color: white;
+    background-color: var(--accent-color);
+    /* Blue */
+}
+
+.statusBadgeInProgress {
+    color: white;
+    background-color: #FFC107;
+    /* Orange */
+}
+
+.statusBadgeResolved {
+    color: white;
+    background-color: var(--success-color);
+    /* Green */
+}
+
+.statusBadgeClosed {
+    color: white;
+    background-color: var(--text-medium);
+    /* Gray */
+}
+
+
+/* --- Assignee Input & Status Select --- */
+.assignedToInput,
+.statusSelect {
+    width: auto;
+    /* Allow natural width */
+    padding: 8px 12px;
+    border: 1px solid var(--neutral-medium);
+    border-radius: 6px;
+    background-color: white;
+    font-size: 0.9em;
+    transition: all 0.2s ease-in-out;
+}
+
+.assignedToInput:focus,
+.statusSelect:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.25);
+    outline: none;
+}
+
+/* --- Chatbox Styles (Refined) --- */
+.chatBox {
+    border: 1px solid var(--neutral-medium);
+    border-radius: 12px;
+    padding: 20px;
+    /* More padding inside */
+    height: 450px;
+    /* Taller chatbox */
+    overflow-y: auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fcfcfc;
+    /* Very light background for chat area */
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+    /* Deeper inner shadow */
+}
+
+/* Base message bubble style */
+.message {
+    max-width: 75%;
+    /* Slightly narrower messages */
+    padding: 12px 18px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    /* Clearer, softer shadow */
+    word-break: break-word;
+    line-height: 1.5;
+
+    /* Animation for new messages */
+    opacity: 0;
+    transform: translateY(15px);
+    /* Start slightly lower */
+    animation: fadeInSlideUp 0.35s forwards ease-out;
+    /* Slightly longer animation */
+}
+
+/* Keyframes for the message animation */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Styles for User messages (right-aligned) */
+.messageUser {
+    background-color: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+    border-radius: 20px 20px 5px 20px;
+    /* Rounded corners with a slightly sharper bottom-right */
+}
+
+.messageUser .smallTimestamp {
+    color: rgba(255, 255, 255, 0.8);
+    /* Lighter timestamp on primary background */
+}
+
+/* Styles for Agent messages (left-aligned) */
+.messageAgent {
+    background-color: var(--neutral-medium);
+    /* Use a neutral color for agent messages */
+    color: var(--text-dark);
+    align-self: flex-start;
+    border-radius: 20px 20px 20px 5px;
+    /* Rounded corners with a slightly sharper bottom-left */
+}
+
+.messageAgent .smallTimestamp {
+    color: var(--text-medium);
+}
+
+.smallTimestamp {
+    font-size: 0.75em;
+    margin-top: 6px;
+    display: block;
+    text-align: right;
+    opacity: 0.8;
+}
+
+/* Chat input form and elements */
+.chatForm {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.chatInput {
+    flex-grow: 1;
+    padding: 14px 20px;
+    border: 1px solid var(--neutral-medium);
+    border-radius: 28px;
+    font-size: 1.05em;
+    color: var(--text-dark);
+    background-color: white;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.chatInput:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.28);
+    /* Stronger focus glow */
+}
+
+.chatButton {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 14px 25px;
+    border-radius: 28px;
+    font-size: 1.05em;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.chatButton:hover {
+    background-color: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.chatButton:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.messageText {
+    /* For the "No messages yet" text in chatbox */
+    text-align: center;
+    color: var(--text-medium);
+    font-style: italic;
+    padding: 20px;
+    background-color: #FDFDFD;
+    border-radius: 8px;
+    margin-top: 15px;
+    border: 1px dashed var(--neutral-medium);
+}
+
+/* --- Sender Toggle Styles --- */
+.senderToggle {
+    text-align: center;
+    margin-top: 25px;
+    padding: 15px;
+    background-color: #F3E5F5;
+    /* Lighter purple from Material Design */
+    border-radius: 12px;
+    border: 1px solid #E1BEE7;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.senderToggle strong {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.senderButton {
+    padding: 10px 20px;
+    margin: 0;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95em;
+    background-color: #E1BEE7;
+    color: #4A148C;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.senderButton:hover {
+    background-color: #CE93D8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.senderButtonActive {
+    background-color: #9C27B0;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.senderButtonActive:hover {
+    background-color: #8E24AA;
+}
+
+/* --- Responsive Adjustments (Optional but Recommended) --- */
+@media (max-width: 768px) {
+    .detailContainer {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .ticketInfoGrid {
+        grid-template-columns: 1fr;
+        /* Stack columns on small screens */
+        gap: 15px;
+    }
+
+    .chatForm {
+        flex-direction: column;
+        /* Stack input and button */
+        gap: 10px;
+    }
+
+    .chatButton {
+        width: 100%;
+        /* Full width button */
+    }
+
+    .message {
+        max-width: 90%;
+        /* Allow messages to be a bit wider */
+    }
+
+    .senderToggle {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+}
