@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import styles from "./TicketDetail.module.css"; // Correct import for CSS module
 
-const BACKEND_URL = "http://localhost:5000"; // Ensure this matches your backend's port
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; // Ensure this matches your backend's port
 const TICKET_API_URL = `${BACKEND_URL}/api/tickets`;
 
 function TicketDetail({ ticket, onBackToList }) {
@@ -11,7 +11,7 @@ function TicketDetail({ ticket, onBackToList }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentStatus, setCurrentStatus] = useState(ticket.status);
-  const [assignedTo, setAssignedTo] = useState(ticket.assignedTo || '');
+  const [assignedTo, setAssignedTo] = useState(ticket.assignedTo || "");
   const [currentSender, setCurrentSender] = useState("User"); // State to toggle message sender
 
   const socket = useRef(null);
@@ -66,7 +66,6 @@ function TicketDetail({ ticket, onBackToList }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-
   // --- HTTP API for Sending Message and Updating Ticket ---
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -75,7 +74,7 @@ function TicketDetail({ ticket, onBackToList }) {
     const messageData = {
       sender: currentSender, // Use the state variable here
       message: newMessage.trim(),
-      timestamp: new Date().toISOString() // Add timestamp here for immediate display if needed
+      timestamp: new Date().toISOString(), // Add timestamp here for immediate display if needed
     };
 
     // Emit message via Socket.IO for real-time display
@@ -136,22 +135,32 @@ function TicketDetail({ ticket, onBackToList }) {
   // Helper to get priority class for styling
   const getPriorityClass = (priority) => {
     switch (priority) {
-      case 'Urgent': return styles.priorityUrgent;
-      case 'High': return styles.priorityHigh;
-      case 'Medium': return styles.priorityMedium;
-      case 'Low': return styles.priorityLow;
-      default: return '';
+      case "Urgent":
+        return styles.priorityUrgent;
+      case "High":
+        return styles.priorityHigh;
+      case "Medium":
+        return styles.priorityMedium;
+      case "Low":
+        return styles.priorityLow;
+      default:
+        return "";
     }
   };
 
   // Helper to get status class for styling
   const getStatusClass = (status) => {
     switch (status) {
-      case 'Open': return styles.statusBadgeOpen;
-      case 'In Progress': return styles.statusBadgeInProgress;
-      case 'Resolved': return styles.statusBadgeResolved;
-      case 'Closed': return styles.statusBadgeClosed;
-      default: return '';
+      case "Open":
+        return styles.statusBadgeOpen;
+      case "In Progress":
+        return styles.statusBadgeInProgress;
+      case "Resolved":
+        return styles.statusBadgeResolved;
+      case "Closed":
+        return styles.statusBadgeClosed;
+      default:
+        return "";
     }
   };
 
@@ -159,19 +168,19 @@ function TicketDetail({ ticket, onBackToList }) {
   const formatMessageTimestamp = (timestamp) => {
     // Ensure timestamp is a valid Date object before calling toLocaleString
     const date = new Date(timestamp);
-    return isNaN(date.getTime()) ? 'Invalid Date' : date.toLocaleString();
+    return isNaN(date.getTime()) ? "Invalid Date" : date.toLocaleString();
   };
 
   return (
-    <div className={styles.detailContainer}> {/* Main container */}
+    <div className={styles.detailContainer}>
+      {" "}
+      {/* Main container */}
       <button onClick={onBackToList} className={styles.backButton}>
         &larr; Back to Tickets
       </button>
-
       {/* Error and Loading Messages */}
       {error && <p className={styles.errorMessage}>{error}</p>}
       {loading && <p className={styles.messageText}>Updating...</p>}
-
       {/* Ticket Info & Description Section */}
       <div className={styles.infoGridAndDescription}>
         <h2 className={styles.sectionTitle}>Ticket: {ticket.subject}</h2>
@@ -182,7 +191,11 @@ function TicketDetail({ ticket, onBackToList }) {
           </div>
           <div className={styles.infoItem}>
             <strong>Priority:</strong>{" "}
-            <span className={`${styles.priority} ${getPriorityClass(ticket.priority)}`}>
+            <span
+              className={`${styles.priority} ${getPriorityClass(
+                ticket.priority
+              )}`}
+            >
               {ticket.priority}
             </span>
           </div>
@@ -191,7 +204,9 @@ function TicketDetail({ ticket, onBackToList }) {
             <select
               value={currentStatus}
               onChange={handleStatusChange}
-              className={`${styles.statusSelect} ${getStatusClass(currentStatus)}`}
+              className={`${styles.statusSelect} ${getStatusClass(
+                currentStatus
+              )}`}
             >
               <option value="Open">Open</option>
               <option value="In Progress">In Progress</option>
@@ -222,18 +237,22 @@ function TicketDetail({ ticket, onBackToList }) {
         <h3 className={styles.sectionTitle}>Description:</h3>
         <p className={styles.descriptionP}>{ticket.description}</p>
       </div>
-
       {/* Chat History Section */}
       <h3 className={styles.sectionTitle}>Chat History:</h3>
-      <div className={styles.chatBox}> {/* Apply chatBox style */}
+      <div className={styles.chatBox}>
+        {" "}
+        {/* Apply chatBox style */}
         {messages.length === 0 ? (
-          <p className={styles.messageText}> {/* Use messageText for no messages */}
+          <p className={styles.messageText}>
+            {" "}
+            {/* Use messageText for no messages */}
             No messages yet. Start the conversation!
           </p>
         ) : (
           messages.map((msg, index) => {
             // Apply conditional message styling (user/agent)
-            const messageClass = msg.sender === "User" ? styles.messageUser : styles.messageAgent;
+            const messageClass =
+              msg.sender === "User" ? styles.messageUser : styles.messageAgent;
             return (
               <div key={index} className={`${styles.message} ${messageClass}`}>
                 <strong>{msg.sender}:</strong> {msg.message}
@@ -246,7 +265,6 @@ function TicketDetail({ ticket, onBackToList }) {
         )}
         <div ref={messagesEndRef} /> {/* For auto-scrolling */}
       </div>
-
       {/* Chat Input Form */}
       <form onSubmit={handleSendMessage} className={styles.chatForm}>
         <input
@@ -260,19 +278,22 @@ function TicketDetail({ ticket, onBackToList }) {
           Send
         </button>
       </form>
-
       {/* Sender Toggle */}
       <div className={styles.senderToggle}>
         <strong>Send as:</strong>
         <button
           onClick={() => setCurrentSender("User")}
-          className={`${styles.senderButton} ${currentSender === "User" ? styles.senderButtonActive : ''}`}
+          className={`${styles.senderButton} ${
+            currentSender === "User" ? styles.senderButtonActive : ""
+          }`}
         >
           User
         </button>
         <button
           onClick={() => setCurrentSender("Agent")}
-          className={`${styles.senderButton} ${currentSender === "Agent" ? styles.senderButtonActive : ''}`}
+          className={`${styles.senderButton} ${
+            currentSender === "Agent" ? styles.senderButtonActive : ""
+          }`}
         >
           Agent
         </button>
