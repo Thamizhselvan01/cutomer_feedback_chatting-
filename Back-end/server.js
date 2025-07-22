@@ -8,17 +8,18 @@ require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-// --- ADD THIS LINE HERE ---
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173"; // Or your local frontend dev URL
-// --- END ADDITION ---
+// Make sure this line is present and correct
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 
 // Middleware
+// --- MODIFY THIS BLOCK HERE FOR EXPRESS CORS ---
 app.use(
   cors({
-    origin: frontendUrl, // Ensure your main Express CORS also uses frontendUrl from env
-    credentials: true,
+    origin: frontendUrl, // THIS MUST BE frontendUrl for your API calls
+    credentials: true, // Keep this if your frontend sends cookies/auth headers
   })
 );
+// --- END MODIFICATION ---
 app.use(express.json());
 
 // Routes
@@ -35,11 +36,9 @@ app.use("/api/tickets", ticketRoutes);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    // --- MODIFY THIS LINE ---
-    origin: frontendUrl, // This MUST use the FRONTEND_URL from your environment variables
-    // --- END MODIFICATION ---
+    origin: frontendUrl, // This MUST also be frontendUrl for Socket.IO
     methods: ["GET", "POST"],
-    credentials: true, // Keep this for consistency and if your frontend needs it
+    credentials: true,
   },
 });
 
@@ -55,7 +54,7 @@ io.on("connection", (socket) => {
     const { ticketId, sender, message } = data; // Save the message to the database // Note: For a truly robust system, you might move this db logic to a dedicated service or controller // For simplicity, we'll directly interact with the model here.
 
     try {
-      const Ticket = require("./models/Ticket"); // Re-import Ticket model here or ensure it's globally accessible if preferred
+      const Ticket = require("./models/Ticket");
       const ticket = await Ticket.findById(ticketId);
 
       if (ticket) {
