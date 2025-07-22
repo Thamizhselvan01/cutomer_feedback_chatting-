@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import styles from "./TicketDetail.module.css"; // Correct import for CSS module
 
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; // Ensure this matches your backend's port
 const TICKET_API_URL = `${BACKEND_URL}/api/tickets`;
 

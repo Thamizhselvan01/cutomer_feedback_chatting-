@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./FeedBacklist.module.css";
-
-const FEEDBACK_API_URL = "http://localhost:5000/api/feedback";
-
+import axiosInstance from "../api/axiosInstance"; // <--- ADD THIS LINE: Import your Axios instance
 
 function FeedbackList({ refreshSignal }) {
   const [feedback, setFeedback] = useState([]);
@@ -13,17 +11,30 @@ function FeedbackList({ refreshSignal }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(FEEDBACK_API_URL);
-      const data = await response.json();
+      // --- CHANGE THIS PART: Use axiosInstance.get() ---
+      const response = await axiosInstance.get("/api/feedback");
+      // Axios automatically appends '/api/feedback' to the baseURL configured in axiosInstance.js
+      // Axios also automatically parses JSON, so you access data via response.data
 
-      if (response.ok) {
-        setFeedback(data);
-      } else {
-        setError(data.message || "Failed to fetch feedback.");
-      }
+      const data = response.data; // <--- Access the data directly here
+
+      // No need for response.ok check with axios if you rely on interceptors for non-2xx responses
+      setFeedback(data);
+      // --- END OF CHANGE ---
     } catch (err) {
-      setError(`Network Error: ${err.message}. Is backend running?`);
-      console.error("Error fetching feedback:", err);
+      // --- CHANGE THIS PART: Improved error handling for Axios ---
+      console.error(
+        "Error fetching feedback:",
+        err.response ? err.response.data : err.message
+      );
+      setError(
+        `Error: ${
+          err.response
+            ? err.response.data.message || "Server error"
+            : "Network Error: " + err.message
+        }`
+      );
+      // --- END OF CHANGE ---
     } finally {
       setLoading(false);
     }
@@ -40,29 +51,15 @@ function FeedbackList({ refreshSignal }) {
 
   return (
     <div className={styles.listContainer}>
-      {" "}
-      {/* <<< Use className */}
-      <h2 className={styles.listTitle}>Customer Feedback</h2>{" "}
-      {/* <<< Use className */}
+      <h2 className={styles.listTitle}>Customer Feedback</h2>
       <ul className={styles.ul}>
-        {" "}
-        {/* <<< Use className */}
         {feedback.map((item) => (
           <li key={item._id} className={styles.li}>
-            {" "}
-            {/* <<< Use className */}
             <div className={styles.feedbackHeader}>
-              {" "}
-              {/* <<< Use className */}
-              <strong className={styles.subject}>{item.subject}</strong>{" "}
-              {/* <<< Use className */}
-              <span className={styles.rating}>
-                Rating: {item.rating}/5
-              </span>{" "}
-              {/* <<< Use className */}
+              <strong className={styles.subject}>{item.subject}</strong>
+              <span className={styles.rating}>Rating: {item.rating}/5</span>
             </div>
-            <p className={styles.messageP}>{item.message}</p>{" "}
-            {/* <<< Use className */}
+            <p className={styles.messageP}>{item.message}</p>
             <small className={styles.userDate}>
               Submitted by {item.user} on:{" "}
               {new Date(item.createdAt).toLocaleString()}

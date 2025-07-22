@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "./TicketList.module.css"; // <<< IMPORT CSS MODULE
-
-const TICKET_API_URL = "http://localhost:5000/api/tickets";
+import styles from "./TicketList.module.css";
+import axiosInstance from "../api/axiosInstance"; // <--- ADD THIS LINE: Import your Axios instance
 
 function TicketList({ refreshSignal, onSelectTicket }) {
   const [tickets, setTickets] = useState([]);
@@ -12,17 +11,30 @@ function TicketList({ refreshSignal, onSelectTicket }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(TICKET_API_URL);
-      const data = await response.json();
+      // --- CHANGE THIS PART: Use axiosInstance.get() ---
+      const response = await axiosInstance.get("/api/tickets");
+      // Axios automatically appends '/api/tickets' to the baseURL configured in axiosInstance.js
+      // Axios also automatically parses JSON, so you access data via response.data
 
-      if (response.ok) {
-        setTickets(data);
-      } else {
-        setError(data.message || "Failed to fetch tickets.");
-      }
+      const data = response.data; // <--- Access the data directly here
+
+      // No need for response.ok check with axios if you rely on interceptors for non-2xx responses
+      setTickets(data);
+      // --- END OF CHANGE ---
     } catch (err) {
-      setError(`Network Error: ${err.message}. Is backend running?`);
-      console.error("Error fetching tickets:", err);
+      // --- CHANGE THIS PART: Improved error handling for Axios ---
+      console.error(
+        "Error fetching tickets:",
+        err.response ? err.response.data : err.message
+      );
+      setError(
+        `Error: ${
+          err.response
+            ? err.response.data.message || "Server error"
+            : "Network Error: " + err.message
+        }`
+      );
+      // --- END OF CHANGE ---
     } finally {
       setLoading(false);
     }
@@ -71,23 +83,15 @@ function TicketList({ refreshSignal, onSelectTicket }) {
 
   return (
     <div className={styles.listContainer}>
-      {" "}
-      {/* <<< USE className */}
       <h2>Customer Tickets</h2>
       <ul className={styles.ul}>
-        {" "}
-        {/* <<< USE className */}
         {tickets.map((ticket) => (
           <li
             key={ticket._id}
             className={styles.li}
             onClick={() => onSelectTicket(ticket)}
           >
-            {" "}
-            {/* <<< USE className */}
             <div className={styles.ticketHeader}>
-              {" "}
-              {/* <<< USE className */}
               <strong>{ticket.subject}</strong>
               <span
                 className={`${styles.priority} ${getPriorityClass(
@@ -95,16 +99,12 @@ function TicketList({ refreshSignal, onSelectTicket }) {
                 )}`}
               >
                 {ticket.priority}
-              </span>{" "}
-              {/* <<< DYNAMIC CLASSES */}
+              </span>
             </div>
             <p className={styles.descriptionP}>
               {ticket.description.substring(0, 100)}...
-            </p>{" "}
-            {/* <<< USE className */}
+            </p>
             <small className={styles.date}>
-              {" "}
-              {/* <<< USE className */}
               Submitted by {ticket.user} on:{" "}
               {new Date(ticket.createdAt).toLocaleString()}
             </small>
@@ -112,8 +112,7 @@ function TicketList({ refreshSignal, onSelectTicket }) {
               className={`${styles.status} ${getStatusClass(ticket.status)}`}
             >
               {ticket.status}
-            </span>{" "}
-            {/* <<< DYNAMIC CLASSES */}
+            </span>
           </li>
         ))}
       </ul>
