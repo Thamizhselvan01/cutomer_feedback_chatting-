@@ -1,40 +1,9 @@
-// const Ticket = require("../models/Ticket.js");
-
-// const getAllTickets = async (req, res) => {
-//   try {
-//     const tickets = await Ticket.find().sort({ createdAt: -1 });
-//     res.status(200).json(tickets);
-//   } catch (error) {
-//     res.status(500).json({ message: "Server Error", error: error.message });
-//   }
-// };
-
-const Ticket = require("../models/Ticket"); // Keep this line
+const Ticket = require("../models/Ticket.js");
 
 const getAllTickets = async (req, res) => {
   try {
-    // --- TEMPORARY DEBUGGING CODE ---
-    const dummyTickets = [
-      {
-        id: "t1",
-        subject: "Dummy Ticket 1",
-        description: "This is a dummy ticket description.",
-        status: "Open",
-        createdAt: new Date(),
-      },
-      {
-        id: "t2",
-        subject: "Dummy Ticket 2",
-        description: "Another dummy ticket description.",
-        status: "In Progress",
-        createdAt: new Date(),
-      },
-    ];
-    res.status(200).json(dummyTickets);
-    console.log("Returned dummy ticket data."); // Add a console log
-    // --- END TEMPORARY DEBUGGING CODE ---
-    // const tickets = await Ticket.find().sort({ createdAt: -1 }); // COMMENT OUT THIS LINE
-    // res.status(200).json(tickets); // COMMENT OUT THIS LINE
+    const tickets = await Ticket.find().sort({ createdAt: -1 });
+    res.status(200).json(tickets);
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
@@ -62,11 +31,9 @@ const submitTicket = async (req, res) => {
   const { user, subject, description, priority } = req.body;
 
   if (!subject || !description) {
-    return res
-      .status(400)
-      .json({
-        message: "Please include all required fields: subject and description",
-      });
+    return res.status(400).json({
+      message: "Please include all required fields: subject and description",
+    });
   }
 
   try {

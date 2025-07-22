@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-
 // Import our components
 import FeedbackForm from "./components/FeedbackFrom";
 import FeedbackList from "./components/FeedBacklist";
 import TicketForm from "./components/TicketFrom"; // New import
 import TicketList from "./components/TicketList"; // New import
 import TicketDetail from "./components/TicketDetail"; // New import
-import "./App.css"
+import "./App.css";
 
 // Define your backend URL
 // const BACKEND_URL = "http://localhost:5000"; // Ensure this matches your backend's port?
@@ -45,7 +44,10 @@ function App() {
     // --- Test Socket.IO Connection ---
     // We're handling the main app socket connection status here.
     // The specific ticket chat socket is handled within TicketDetail.jsx
-    const mainSocket = io(BACKEND_URL);
+    const mainSocket = io(BACKEND_URL, {
+      transports: ["websocket", "polling"], // Explicitly prefer websockets, then fall back to polling
+      withCredentials: true, // Ensure credentials are sent with Socket.IO requests
+    });
 
     mainSocket.on("connect", () => {
       setSocketStatus(`Socket.IO Connected: ${mainSocket.id}`);
