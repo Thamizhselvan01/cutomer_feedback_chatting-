@@ -1,9 +1,40 @@
-const Ticket = require("../models/Ticket.js");
+// const Ticket = require("../models/Ticket.js");
+
+// const getAllTickets = async (req, res) => {
+//   try {
+//     const tickets = await Ticket.find().sort({ createdAt: -1 });
+//     res.status(200).json(tickets);
+//   } catch (error) {
+//     res.status(500).json({ message: "Server Error", error: error.message });
+//   }
+// };
+
+const Ticket = require("../models/Ticket"); // Keep this line
 
 const getAllTickets = async (req, res) => {
   try {
-    const tickets = await Ticket.find().sort({ createdAt: -1 });
-    res.status(200).json(tickets);
+    // --- TEMPORARY DEBUGGING CODE ---
+    const dummyTickets = [
+      {
+        id: "t1",
+        subject: "Dummy Ticket 1",
+        description: "This is a dummy ticket description.",
+        status: "Open",
+        createdAt: new Date(),
+      },
+      {
+        id: "t2",
+        subject: "Dummy Ticket 2",
+        description: "Another dummy ticket description.",
+        status: "In Progress",
+        createdAt: new Date(),
+      },
+    ];
+    res.status(200).json(dummyTickets);
+    console.log("Returned dummy ticket data."); // Add a console log
+    // --- END TEMPORARY DEBUGGING CODE ---
+    // const tickets = await Ticket.find().sort({ createdAt: -1 }); // COMMENT OUT THIS LINE
+    // res.status(200).json(tickets); // COMMENT OUT THIS LINE
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
@@ -27,12 +58,15 @@ const getTicketById = async (req, res) => {
   }
 };
 
-
 const submitTicket = async (req, res) => {
   const { user, subject, description, priority } = req.body;
 
   if (!subject || !description) {
-    return res.status(400).json({ message: 'Please include all required fields: subject and description' });
+    return res
+      .status(400)
+      .json({
+        message: "Please include all required fields: subject and description",
+      });
   }
 
   try {
@@ -45,7 +79,9 @@ const submitTicket = async (req, res) => {
     });
     res.status(201).json(newTicket);
   } catch (error) {
-    res.status(400).json({ message: 'Failed to submit ticket', error: error.message });
+    res
+      .status(400)
+      .json({ message: "Failed to submit ticket", error: error.message });
   }
 };
 
@@ -55,7 +91,7 @@ const updateTicket = async (req, res) => {
     const ticket = await Ticket.findById(id);
 
     if (!ticket) {
-      return res.status(404).json({ message: 'Ticket not found' });
+      return res.status(404).json({ message: "Ticket not found" });
     }
 
     // Only allow certain fields to be updated for security/logic
@@ -73,10 +109,12 @@ const updateTicket = async (req, res) => {
 
     res.status(200).json(updatedTicket);
   } catch (error) {
-     if (error.kind === 'ObjectId') {
-      return res.status(404).json({ message: 'Ticket not found with provided ID' });
+    if (error.kind === "ObjectId") {
+      return res
+        .status(404)
+        .json({ message: "Ticket not found with provided ID" });
     }
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -86,13 +124,15 @@ const addTicketMessage = async (req, res) => {
     const { sender, message } = req.body;
 
     if (!sender || !message) {
-      return res.status(400).json({ message: 'Sender and message are required' });
+      return res
+        .status(400)
+        .json({ message: "Sender and message are required" });
     }
 
     const ticket = await Ticket.findById(id);
 
     if (!ticket) {
-      return res.status(404).json({ message: 'Ticket not found' });
+      return res.status(404).json({ message: "Ticket not found" });
     }
 
     ticket.messages.push({ sender, message }); // Push new message to the array
@@ -100,10 +140,12 @@ const addTicketMessage = async (req, res) => {
 
     res.status(201).json(ticket.messages[ticket.messages.length - 1]); // Return the newly added message
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      return res.status(404).json({ message: 'Ticket not found with provided ID' });
+    if (error.kind === "ObjectId") {
+      return res
+        .status(404)
+        .json({ message: "Ticket not found with provided ID" });
     }
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
