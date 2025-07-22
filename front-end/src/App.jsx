@@ -10,7 +10,9 @@ import TicketDetail from "./components/TicketDetail"; // New import
 import "./App.css"
 
 // Define your backend URL
-const BACKEND_URL = "http://localhost:5000"; // Ensure this matches your backend's port
+// const BACKEND_URL = "http://localhost:5000"; // Ensure this matches your backend's port?
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const _socket = io(BACKEND_URL); // Renamed to _socket to indicate it's intentionally unused here
 
 function App() {
   const [backendStatus, setBackendStatus] = useState("Connecting...");
