@@ -1,37 +1,38 @@
 const mongoose = require("mongoose");
 
-const TicketSchema = new mongoose.Schema({
-  user: {
-    type: String,
-    required: true,
-  },
-  subject: {
+const TicketSchema = new mongoose.Schema(
+  {
+    user: {
       type: String,
-      required: [true, 'Please enter a subject for your ticket'],
-      minlength: [5, 'Subject must be at least 5 characters long'],
-      max_length: [100, 'Subject cannot exceed 100 characters'],
+      required: true,
     },
- description: {
+    subject: {
       type: String,
-      required: [true, 'Please provide a detailed description'],
-      minlength: [20, 'Description must be at least 20 characters long'],
-      max_length: [1000, 'Description cannot exceed 1000 characters'],
+      required: [true, "Please enter a subject for your ticket"],
+      minlength: [5, "Subject must be at least 5 characters long"], // CORRECTED HERE
+      maxlength: [100, "Subject cannot exceed 100 characters"], // CORRECTED HERE
+    },
+    description: {
+      type: String,
+      required: [true, "Please provide a detailed description"],
+      minlength: [20, "Description must be at least 20 characters long"], // CORRECTED HERE
+      maxlength: [1000, "Description cannot exceed 1000 characters"], // CORRECTED HERE
     },
     status: {
       type: String,
-      enum: ['Open', 'In Progress', 'Resolved', 'Closed'],
-      default: 'Open',
+      enum: ["Open", "In Progress", "Resolved", "Closed"],
+      default: "Open",
     },
-  priority: {
+    priority: {
       type: String,
-      enum: ['Low', 'Medium', 'High', 'Urgent'],
-      default: 'Medium',
+      enum: ["Low", "Medium", "High", "Urgent"],
+      default: "Medium",
     },
-     assignedTo: {
+    assignedTo: {
       type: String, // Will reference a User/Agent model later
       required: false,
     },
-   messages: [
+    messages: [
       {
         sender: {
           type: String, // 'User' or 'Agent'
@@ -55,6 +56,6 @@ const TicketSchema = new mongoose.Schema({
 );
 
 // Create the Ticket Model from the schema
-const Ticket = mongoose.model('Ticket', TicketSchema);
+const Ticket = mongoose.model("Ticket", TicketSchema);
 
 module.exports = Ticket; // Export the model
