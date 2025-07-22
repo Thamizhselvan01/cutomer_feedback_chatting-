@@ -18,13 +18,22 @@ console.log(
 
 // Middleware
 // --- MODIFY THIS BLOCK HERE FOR EXPRESS CORS ---
+// In server.js (backend)
+
+// ... other imports ...
+const cors = require("cors"); // Ensure cors is imported
+
+// ... define frontendUrl ...
+
 app.use(
   cors({
-    origin: frontendUrl, // THIS MUST BE frontendUrl for your API calls
-    credentials: true, // Keep this if your frontend sends cookies/auth headers
+    origin: frontendUrl, // e.g., "https://customer-feedback-chat.netlify.app"
+    methods: ["GET", "POST", "PUT", "DELETE"], // <--- **ENSURE "POST" IS INCLUDED HERE**
+    credentials: true,
   })
 );
-// --- END MODIFICATION ---
+
+// ... rest of your server.js ...ND MODIFICATION ---
 app.use(express.json());
 
 // Routes

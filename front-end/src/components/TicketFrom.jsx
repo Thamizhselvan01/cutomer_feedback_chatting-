@@ -1,64 +1,85 @@
-import React, { useState } from 'react'; // Make sure useState is imported!
-import styles from './TicketFrom.module.css';
+// src/components/TicketForm.jsx
+import React, { useState } from "react";
+import styles from "./TicketFrom.module.css";
+import axiosInstance from "../api/axiosInstance"; // <--- Keep this import!
 
+// REMOVE THIS LINE:
+// const TICKET_API_URL = 'http://localhost:5000/api/tickets';
 
-const TICKET_API_URL = 'http://localhost:5000/api/tickets';
-
-function TicketForm({ onTicketCreated }) {
-  // <<< CHECK THESE LINES CAREFULLY >>>
-  const [subject, setSubject] = useState('');
-  const [user, setUser] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('Low');
+function TicketForm({ onNewTicket }) {
+  // Changed prop name to match your App.jsx: onNewTicket
+  const [subject, setSubject] = useState("");
+  const [user, setUser] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("Low");
   const [message, setMessage] = useState(null); // For success/error messages
-  // <<< END CHECK >>>
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage(null); // Clear previous messages
 
+    // Prepare the data to send
+    const formData = { subject, user, description, priority };
+
     try {
-      const response = await fetch(TICKET_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ subject, user, description, priority }),
-      });
+      // --- CHANGE THIS PART: Use axiosInstance.post() ---
+      // Axios automatically handles method, headers (for JSON), and JSON.stringify(body)
+      const response = await axiosInstance.post("/api/tickets", formData);
 
-      const data = await response.json();
+      // Axios automatically parses JSON and puts it in .data
+      const data = response.data;
+      // --- END OF CHANGE ---
 
-      if (response.ok) {
-        setMessage({ type: 'success', text: 'Ticket submitted successfully!' });
-        setSubject('');
-        setUser('');
-        setDescription('');
-        setPriority('Low');
-        if (onTicketCreated) {
-          onTicketCreated(); // Trigger refresh in TicketList
-        }
-      } else {
-        setMessage({ type: 'error', text: data.message || 'Failed to submit ticket.' });
+      setMessage({ type: "success", text: "Ticket submitted successfully!" });
+      setSubject("");
+      setUser("");
+      setDescription("");
+      setPriority("Low");
+
+      // onNewTicket will receive the response data, similar to how you were using onTicketCreated
+      if (onNewTicket) {
+        // Use onNewTicket here, as passed from App.jsx
+        onNewTicket(data); // Pass the data from the successful response
       }
     } catch (err) {
-      setMessage({ type: 'error', text: `Network error: ${err.message}. Please try again.` });
-      console.error('Error submitting ticket:', err);
+      // --- CHANGE THIS PART: Improved error handling for Axios ---
+      console.error(
+        "Error submitting ticket:",
+        err.response ? err.response.data : err.message
+      );
+      setMessage({
+        type: "error",
+        text: `Error: ${
+          err.response
+            ? err.response.data.message || "Server error"
+            : "Network error: " + err.message
+        }. Please try again.`,
+      });
+      // --- END OF CHANGE ---
     }
   };
 
   return (
-    <div className={styles.formContainer}> {/* <<< Use className */}
-      <h2 className={styles.formTitle}>Submit a New Ticket</h2> {/* <<< Use className */}
+    <div className={styles.formContainer}>
+      <h2 className={styles.formTitle}>Submit a New Ticket</h2>
 
       {message && (
-        <p className={message.type === 'success' ? styles.successMessage : styles.errorMessage}>
+        <p
+          className={
+            message.type === "success"
+              ? styles.successMessage
+              : styles.errorMessage
+          }
+        >
           {message.text}
         </p>
       )}
 
       <form onSubmit={handleSubmit}>
-        <div className={styles.formGroup}> {/* <<< Use className */}
-          <label htmlFor="subject" className={styles.label}>Subject:</label> {/* <<< Use className */}
+        <div className={styles.formGroup}>
+          <label htmlFor="subject" className={styles.label}>
+            Subject:
+          </label>
           <input
             type="text"
             id="subject"
@@ -70,7 +91,9 @@ function TicketForm({ onTicketCreated }) {
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="user" className={styles.label}>Your Name/Email:</label>
+          <label htmlFor="user" className={styles.label}>
+            Your Name/Email:
+          </label>
           <input
             type="text"
             id="user"
@@ -82,7 +105,9 @@ function TicketForm({ onTicketCreated }) {
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="description" className={styles.label}>Description:</label>
+          <label htmlFor="description" className={styles.label}>
+            Description:
+          </label>
           <textarea
             id="description"
             className={styles.textarea}
@@ -93,7 +118,9 @@ function TicketForm({ onTicketCreated }) {
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="priority" className={styles.label}>Priority:</label>
+          <label htmlFor="priority" className={styles.label}>
+            Priority:
+          </label>
           <select
             id="priority"
             className={styles.select}
@@ -107,7 +134,9 @@ function TicketForm({ onTicketCreated }) {
           </select>
         </div>
 
-        <button type="submit" className={styles.submitButton}>Submit Ticket</button> {/* <<< Use className */}
+        <button type="submit" className={styles.submitButton}>
+          Submit Ticket
+        </button>
       </form>
     </div>
   );
