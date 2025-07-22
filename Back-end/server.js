@@ -8,9 +8,17 @@ require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+// --- ADD THIS LINE HERE ---
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173"; // Or your local frontend dev URL
+// --- END ADDITION ---
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: frontendUrl, // Ensure your main Express CORS also uses frontendUrl from env
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Routes
@@ -27,26 +35,25 @@ app.use("/api/tickets", ticketRoutes);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Allow your frontend to connect
-    methods: ['GET', 'POST'],
+    // --- MODIFY THIS LINE ---
+    origin: frontendUrl, // This MUST use the FRONTEND_URL from your environment variables
+    // --- END MODIFICATION ---
+    methods: ["GET", "POST"],
+    credentials: true, // Keep this for consistency and if your frontend needs it
   },
 });
 
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
+  console.log(`User Connected: ${socket.id}`); // When a client sends a 'join_ticket' event, put them in a specific room
 
-  // When a client sends a 'join_ticket' event, put them in a specific room
   socket.on("join_ticket", (ticketId) => {
     socket.join(ticketId); // Join a room named after the ticketId
     console.log(`User ${socket.id} joined room: ${ticketId}`);
   });
 
   socket.on("ticket_message", async (data) => {
-    const { ticketId, sender, message } = data;
+    const { ticketId, sender, message } = data; // Save the message to the database // Note: For a truly robust system, you might move this db logic to a dedicated service or controller // For simplicity, we'll directly interact with the model here.
 
-    // Save the message to the database
-    // Note: For a truly robust system, you might move this db logic to a dedicated service or controller
-    // For simplicity, we'll directly interact with the model here.
     try {
       const Ticket = require("./models/Ticket"); // Re-import Ticket model here or ensure it's globally accessible if preferred
       const ticket = await Ticket.findById(ticketId);
@@ -54,9 +61,8 @@ io.on("connection", (socket) => {
       if (ticket) {
         const newMessage = { sender, message, timestamp: new Date() };
         ticket.messages.push(newMessage);
-        await ticket.save();
+        await ticket.save(); // Emit the new message to everyone in the specific ticket room (including the sender)
 
-        // Emit the new message to everyone in the specific ticket room (including the sender)
         io.to(ticketId).emit("receive_message", newMessage);
         console.log(`Message sent to room ${ticketId}: ${message}`);
       } else {
