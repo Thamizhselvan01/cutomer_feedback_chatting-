@@ -10,11 +10,11 @@ const app = express();
 const port = process.env.PORT || 5000;
 // Make sure this line is present and correct
 // In server.js (backend)
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-console.log(
-  "Backend configured with FRONTEND_URL for CORS (for Socket.IO):",
-  frontendUrl
-); // <--- Add this line
+// const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+// console.log(
+//   "Backend configured with FRONTEND_URL for CORS (for Socket.IO):",
+//   frontendUrl
+// ); // <--- Add this line
 
 // Middleware
 // --- MODIFY THIS BLOCK HERE FOR EXPRESS CORS ---
