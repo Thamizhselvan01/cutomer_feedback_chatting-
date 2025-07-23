@@ -1,10 +1,9 @@
 // routes/ticketRoutes.js
 const express = require('express');
 const router = express.Router();
-const ticketController = require('./controllers/ticketController'); // Ensure path is correct
+const ticketController = require('../controllers/ticketController'); // <--- **THIS IS THE CRITICAL FIX!**
 
-router.post('/', ticketController.createTicket); // <--- ENSURE THIS LINE EXISTS AND IS CORRECT
-
-router.get('/', ticketController.getAllTickets); // You confirmed GET works, so this is likely fine
+router.post('/', ticketController.submitTicket); // Changed to submitTicket based on your controller exports
+router.get('/', ticketController.getAllTickets);
 
 module.exports = router;
