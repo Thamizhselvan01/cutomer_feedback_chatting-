@@ -1,40 +1,33 @@
 const express = require("express");
-const cors = require("cors");
+const cors = require("cors"); // Keep this one
 const connectDb = require("./config/connectDB");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+const Ticket = require("./models/Ticket"); // <-- Moved this import here
 
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-// Make sure this line is present and correct
-// In server.js (backend)
-// const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-// console.log(
-//   "Backend configured with FRONTEND_URL for CORS (for Socket.IO):",
-//   frontendUrl
-// ); // <--- Add this line
+
+// IMPORTANT: Uncomment this line!
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+console.log(
+  "Backend configured with FRONTEND_URL for CORS (for Express & Socket.IO):",
+  frontendUrl
+);
 
 // Middleware
-// --- MODIFY THIS BLOCK HERE FOR EXPRESS CORS ---
-// In server.js (backend)
+app.use(express.json()); // For parsing JSON request bodies
 
-// ... other imports ...
-const cors = require("cors"); // Ensure cors is imported
-
-// ... define frontendUrl ...
-
+// Express CORS Middleware
 app.use(
   cors({
-    origin: frontendUrl, // e.g., "https://customer-feedback-chat.netlify.app"
-    methods: ["GET", "POST", "PUT", "DELETE"], // <--- **ENSURE "POST" IS INCLUDED HERE**
+    origin: frontendUrl,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Added OPTIONS for preflight requests
     credentials: true,
   })
 );
-
-// ... rest of your server.js ...ND MODIFICATION ---
-app.use(express.json());
 
 // Routes
 app.get("/", (req, res) => {
@@ -48,33 +41,35 @@ app.use("/api/feedback", feedbackRoutes);
 app.use("/api/tickets", ticketRoutes);
 
 const httpServer = createServer(app);
+
+// Socket.IO Server Setup
 const io = new Server(httpServer, {
   cors: {
     origin: frontendUrl, // This MUST also be frontendUrl for Socket.IO
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Ensure comprehensive methods
     credentials: true,
   },
 });
 
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`); // When a client sends a 'join_ticket' event, put them in a specific room
+  console.log(`User Connected: ${socket.id}`);
 
   socket.on("join_ticket", (ticketId) => {
-    socket.join(ticketId); // Join a room named after the ticketId
+    socket.join(ticketId);
     console.log(`User ${socket.id} joined room: ${ticketId}`);
   });
 
   socket.on("ticket_message", async (data) => {
-    const { ticketId, sender, message } = data; // Save the message to the database // Note: For a truly robust system, you might move this db logic to a dedicated service or controller // For simplicity, we'll directly interact with the model here.
+    const { ticketId, sender, message } = data;
 
     try {
-      const Ticket = require("./models/Ticket");
+      // Ticket model is now imported at the top
       const ticket = await Ticket.findById(ticketId);
 
       if (ticket) {
         const newMessage = { sender, message, timestamp: new Date() };
         ticket.messages.push(newMessage);
-        await ticket.save(); // Emit the new message to everyone in the specific ticket room (including the sender)
+        await ticket.save();
 
         io.to(ticketId).emit("receive_message", newMessage);
         console.log(`Message sent to room ${ticketId}: ${message}`);
@@ -94,17 +89,22 @@ io.on("connection", (socket) => {
 // Start the server
 const startServer = async () => {
   try {
-    await connectDb();
+    // Connect to MongoDB
+    await connectDb(); // This function should handle the actual MongoDB connection
+
+    // Start listening for HTTP and Socket.IO connections
     httpServer.listen(port, () => {
       console.log(`Server running on port ${port}`);
-      console.log(`Access HTTP APIs at: http://localhost:${port}`);
+      console.log(`Access HTTP APIs at: http://localhost:${port}`); // Note: This will be your Render URL when deployed
       console.log(`Socket.IO listening on port ${port}`);
     });
   } catch (error) {
     console.error("Failed to start the server:", error);
+    // Exit the process if the server fails to start after a critical error
+    process.exit(1); // This is good practice for critical startup failures
   }
 };
 
 startServer();
 
-module.exports = app;
+// module.exports = app; // Usually not needed if you're running server.js directly
